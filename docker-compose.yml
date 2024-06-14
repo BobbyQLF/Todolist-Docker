@@ -1,0 +1,20 @@
+#version du format fichier yml
+version: '3.4'
+
+#definit service / conteneur que D-C doit gerer
+services:
+   
+  #nom du service
+  app: 
+    image: todolistflask
+    build:
+      #repertoire a utiliser pour build
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:5000
+    #pour persister les données
+    volumes:
+      - todolist.db:/app/db
+volumes:
+  todolist.db:
