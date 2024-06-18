@@ -25,8 +25,8 @@ jobs:
       run: docker build -t chicchino/todolist-flask:latest .
     
     - name: Tag docker-image
+    #prend ID de la 1re image avec -aq | head -n1
       run: docker tag $(docker images -aq | head -n1) ${{ secrets.DOCKER_USERNAME }}/todolist-flask:latest
-      #prend ID de la 1re image avec -aq | head -n1  
       
     - name: Push to registry
       run: docker push chicchino/todolist-flask:latest

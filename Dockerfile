@@ -1,22 +1,18 @@
 # Python image
 FROM python:3.8-slim
 
-# Work directory 
-WORKDIR /
+# Définir work directory 
+WORKDIR /app
 
 # Variables d'environnement
 ENV FLASK_APP app.py
 ENV FLASK_ENV development
 
 # Copier requirements dans le container
-COPY ./requirements.txt /requirements.txt
+COPY ./requirements.txt requirements.txt
 
 # Installer requirements
 RUN pip3 install -r requirements.txt
-RUN mkdir app
-
-# Définir le répertoire de travail
-WORKDIR /app
 
 # Copier le contenu du dossier courant dans le container
 COPY . .

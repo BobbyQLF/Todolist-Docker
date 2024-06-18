@@ -1,20 +1,20 @@
-#Version de docker-compose
-version: '3.4'
+# Version de docker-compose
+version: '3.9'
 
-#Définit service / conteneur que D-C doit gerer
+# Définit service / conteneur que D-C doit gerer
 services:
    
-  #nom du service
+  # Nom du service
   app: 
     image: todolistflask
     build:
-      #repertoire a utiliser pour build
+      # Repertoire a utiliser pour build
       context: .
       dockerfile: ./Dockerfile
     ports:
       - 5000:5000
 
-    #pour persister les données
+    # Pour persister les données
     volumes:
       - todolist.db:/app/db
 volumes:

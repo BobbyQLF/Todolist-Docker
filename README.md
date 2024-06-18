@@ -8,8 +8,8 @@ To do list python pour m'entrainer avec docker / github actions
 git clone https://github.com/BobbyQLF/Todolist-Docker.git
 cd Todolist-Docker
 
-#Build l'image 
-docker biuld -t todolist-flask:latest .
+# Build l'image 
+docker build -t todolist-flask:latest .
 
 #Vérifier si l'image est build
 docker image ls
