@@ -1,7 +1,7 @@
-#version du format fichier yml
+#Version de docker-compose
 version: '3.4'
 
-#definit service / conteneur que D-C doit gerer
+#Définit service / conteneur que D-C doit gerer
 services:
    
   #nom du service
