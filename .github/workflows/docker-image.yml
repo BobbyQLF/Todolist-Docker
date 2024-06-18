@@ -1,16 +1,16 @@
-name: Docker Image CI test
+name: Push to Docker Hub
 
-#event qui déclenche le workflow
+# Event qui déclenche le workflow
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-#liste de jobs qui seront exécutés
+# Liste de jobs qui seront exécutés
 jobs:
 
-  #nom du job
+  # Nom du job
   build:
 
     runs-on: ubuntu-latest
@@ -25,7 +25,8 @@ jobs:
       run: docker build -t chicchino/todolist-flask:latest .
     
     - name: Tag docker-image
-    #prend ID de la 1re image avec -aq | head -n1
+    
+    # Prend ID de la 1re image avec -aq | head -n1
       run: docker tag $(docker images -aq | head -n1) ${{ secrets.DOCKER_USERNAME }}/todolist-flask:latest
       
     - name: Push to registry
