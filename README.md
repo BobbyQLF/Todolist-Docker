@@ -11,7 +11,7 @@ cd Todolist-Docker
 # Build l'image 
 docker build -t todolist-flask:latest .
 
-#Vérifier si l'image est build
+# Vérifier si l'image est build
 docker image ls
 
 # Créer un volume pour persister les données
@@ -24,6 +24,32 @@ docker volume ls
 docker run -dp 5000:5000 -v todolist.db:/app/db todolist-flask
 
 # Regarder localhost:5000
+```
+Autre version :
+```
+# Lancer un container database postgreSQL
+docker run -d \                 
+  --name postgres_db \
+  --network todolist-network \
+  -e POSTGRES_DB=todolist \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=password \
+  -v todolist_db_data:/var/lib/postgresql/data \
+  postgres:14
+
+docker build -t todolistflask1 .
+
+# Lancer container avec l'app
+docker run -d \
+  --name flask_app \
+  --network todolist-network \
+  -e FLASK_APP=app.py \
+  -e FLASK_ENV=development \
+  -e DATABASE_URL=postgresql://postgres:password@postgres_db:5432/todolist \
+  -p 5000:5000 \
+  -v $(pwd)/todolist.db:/app/todolist.db \
+  todolistflask1
+
 ```
 
 # Pour lancer le projet depuis Docker Hub
@@ -46,7 +72,9 @@ docker run -dp 5000:5000 -v todolist.db:/app/db todolist-flask
 # Docker compose
 ```
 # Lancer la commande docker-compose
-docker-compose up -d 
+docker-compose build
+
+docker compose up -d
 
 # Vérifier les services 
 docker-compose ps 

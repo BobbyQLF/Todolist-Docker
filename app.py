@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -18,8 +18,7 @@ class Todo(db.Model):
 
 @app.route('/')
 def index():
-
-    todoList = Todo.query.all()
+    todoList = Todo.query.order_by(Todo.id).all()
     return render_template('base.html', todo_list=todoList)
 
 
