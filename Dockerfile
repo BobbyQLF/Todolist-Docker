@@ -1,5 +1,5 @@
 # Python image
-FROM python:3.10-slim
+FROM python:3.8-slim
 
 # Définir work directory 
 WORKDIR /app
@@ -12,7 +12,7 @@ ENV FLASK_ENV development
 COPY ./requirements.txt requirements.txt
 
 # Installer requirements
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 # Copier le contenu du dossier courant dans le container
 COPY . .

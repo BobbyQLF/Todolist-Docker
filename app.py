@@ -14,8 +14,7 @@ class Todo(db.Model):
     complete = db.Column(db.Boolean) 
     user_id = db.Column(db.Integer)
 
-with app.app_context():
-    db.create_all()
+
 
 @app.route('/')
 def index():
