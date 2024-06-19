@@ -12,7 +12,7 @@ ENV FLASK_ENV development
 COPY ./requirements.txt requirements.txt
 
 # Installer requirements
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copier le contenu du dossier courant dans le container
 COPY . .
