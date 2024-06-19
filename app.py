@@ -3,6 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 app = Flask(__name__)
+
+# Correction de l'URI de la base de données pour SQLAlchemy
+database_url = os.getenv('DATABASE_URL')
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -14,7 +20,10 @@ class Todo(db.Model):
     complete = db.Column(db.Boolean) 
     user_id = db.Column(db.Integer)
 
-
+@app.before_first_request
+def create_tables():
+    with app.app_context():
+        db.create_all()
 
 @app.route('/')
 def index():
