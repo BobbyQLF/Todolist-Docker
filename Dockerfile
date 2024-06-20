@@ -18,6 +18,6 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 # Commande pour lancer l'application
-CMD python3 app.py
+# CMD python3 app.py
 
-# CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "app:app"
+CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "app:app"]
