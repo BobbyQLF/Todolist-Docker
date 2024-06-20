@@ -1,7 +1,7 @@
 # Python image
 FROM python:3.8-slim
 
-# Définir work directory 
+# Work directory 
 WORKDIR /app
 
 # Variables d'environnement
@@ -9,7 +9,7 @@ ENV FLASK_APP app.py
 ENV FLASK_ENV development
 
 # Copier requirements dans le container
-COPY ./requirements.txt requirements.txt
+COPY ./requirements.txt /requirements.txt
 
 # Installer requirements
 RUN pip3 install -r requirements.txt
@@ -18,6 +18,4 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 # Commande pour lancer l'application
-EXPOSE 5000
-
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+CMD python3 app.py
