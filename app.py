@@ -14,10 +14,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    todos = db.relationship('Todo', backref='user', lazy=True)
+
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    task = db.Column(db.String(120), nullable=False)
-    complete = db.Column(db.Boolean, default=False)
+    task = db.Column(db.String(1000), nullable=False)
+    complete = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @app.route('/')
@@ -36,7 +41,7 @@ def add():
     if title == "":
         return redirect(url_for("index"))
     # create a todo object
-    newTask = Todo(task=title, complete=False)
+    newTask = Todo(task=title, complete=False, user_id=1)  # Ajout d'un user_id par défaut
     
     # try to add the object to the database
     try:
@@ -62,7 +67,7 @@ def delete(todo_id):
         return "There was an issue deleting your task."
 
 
-# delete a task
+# update a task
 @app.route('/update/<int:todo_id>')
 def update(todo_id):
 
@@ -83,6 +88,4 @@ if __name__ == "__main__":
     
     db.create_all()
     port = int(os.environ.get('PORT', 5000))
-
     app.run(host = '0.0.0.0', port = port)
-
