@@ -1,6 +1,6 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-import os
 
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ database_url = os.getenv('DATABASE_URL')
 if database_url and database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -17,19 +17,13 @@ db = SQLAlchemy(app)
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(1000), nullable=False)
-    complete = db.Column(db.Boolean) 
+    complete = db.Column(db.Boolean)
     user_id = db.Column(db.Integer)
-
-@app.before_first_request
-def create_tables():
-    with app.app_context():
-        db.create_all()
 
 @app.route('/')
 def index():
     todoList = Todo.query.order_by(Todo.id).all()
     return render_template('base.html', todo_list=todoList)
-
 
 # add a task
 @app.route('/add', methods=["POST"])
@@ -92,23 +86,3 @@ if __name__ == "__main__":
 
     app.run(host = '0.0.0.0', port = port)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    '''
-
-
-
-
-'''

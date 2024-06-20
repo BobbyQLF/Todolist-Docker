@@ -18,5 +18,6 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 # Commande pour lancer l'application
-ENTRYPOINT python3 app.py;
-CMD gunicorn --bind 0.0.0.0:$PORT wsgi
+EXPOSE 5000
+
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
