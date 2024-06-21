@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 
@@ -11,8 +12,10 @@ if database_url and database_url.startswith("postgres://"):
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')  # Clé secrète par défaut
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,8 +24,8 @@ class User(db.Model):
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    task = db.Column(db.String(1000), nullable=False)
-    complete = db.Column(db.Boolean)
+    task = db.Column(db.String(120), nullable=False)
+    complete = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @app.route('/')
@@ -39,6 +42,7 @@ def add():
 
     # if the title is empty then redirect to the index page
     if title == "":
+        flash("Task title cannot be empty.")
         return redirect(url_for("index"))
     # create a todo object
     newTask = Todo(task=title, complete=False, user_id=1)  # Ajout d'un user_id par défaut
@@ -47,9 +51,12 @@ def add():
     try:
         db.session.add(newTask)
         db.session.commit()
+        flash("Task added successfully.")
         return redirect(url_for("index"))
-    except:
-        return "There was an issue adding your task."
+    except Exception as e:
+        db.session.rollback()
+        flash(f"There was an issue adding your task: {e}")
+        return redirect(url_for("index"))
 
 
 # delete a task
@@ -62,9 +69,12 @@ def delete(todo_id):
     try:
         db.session.delete(task)
         db.session.commit()
+        flash("Task deleted successfully.")
         return redirect(url_for("index"))
-    except:
-        return "There was an issue deleting your task."
+    except Exception as e:
+        db.session.rollback()
+        flash(f"There was an issue deleting your task: {e}")
+        return redirect(url_for("index"))
 
 
 # update a task
@@ -79,9 +89,12 @@ def update(todo_id):
     # try to commit to the database
     try:
         db.session.commit()
+        flash("Task updated successfully.")
         return redirect(url_for("index"))
-    except:
-        return "There was an issue deleting your task."
+    except Exception as e:
+        db.session.rollback()
+        flash(f"There was an issue updating your task: {e}")
+        return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
