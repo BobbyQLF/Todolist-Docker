@@ -31,6 +31,7 @@ class Todo(db.Model):
 @app.route('/')
 def index():
     todoList = Todo.query.order_by(Todo.id).all()
+    print(todoList)
     return render_template('base.html', todo_list=todoList)
 
 # add a task
