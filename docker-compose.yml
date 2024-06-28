@@ -1,16 +1,17 @@
-# Définit service / conteneur que D-C doit gerer
+# Définit service / conteneur que Docker Compose doit gerer
 services:
    
   # Nom du service
   app: 
     image: todolistflask
     build:
-      # Repertoire a utiliser pour build
+      # Repertoire à utiliser pour build
       context: .
       dockerfile: ./Dockerfile
     ports:
       - 5000:5000
     environment:
+    # Pour se connecter à la base de donnees
       - FLASK_APP=app.py
       - FLASK_ENV=development
       - DATABASE_URL=postgresql://postgres:password@db:5432/todolist
@@ -25,8 +26,14 @@ services:
       POSTGRES_DB: todolist
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    
+    # Déclaration du volume au niveau du service :
+    # Associe le volume à un chemin spécifique dans le conteneur.  
     volumes:
       - todolist_db_data:/var/lib/postgresql/data
 
+
+# Déclaration globale du volume : 
+# Informe Docker Compose de créer et gérer ce volume.
 volumes:
   todolist_db_data:

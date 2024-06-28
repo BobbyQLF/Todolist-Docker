@@ -136,3 +136,16 @@ Si vous préférez utiliser Docker Compose, suivez les étapes ci-dessous :
   ```
 
 5. Accédez à l'application en ouvrant http://localhost:5000 dans votre navigateur.
+
+### Heroku
+
+Pour avoir acces à la base de donnée :
+```
+heroku pg:psql --app todolist-docker  
+```
+
+Puis faire les commandes SQL classique :
+```
+SELECT * FROM todo;
+SELECT * FROM "user";
+```
