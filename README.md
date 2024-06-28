@@ -149,3 +149,26 @@ Puis faire les commandes SQL classique :
 SELECT * FROM todo;
 SELECT * FROM "user";
 ```
+
+Ajout manuel d'une tache et d'un user :
+```
+INSERT INTO "user" (id, name) VALUES (1, 'Test User');
+INSERT INTO todo (task, complete, user_id) VALUES ('Test Task', false, 1);
+```
+
+Pour voir les logs :
+```
+heroku logs --tail
+```
+
+### Migration de database 
+À faire localement ses 2 commandes puis push pour enfin faire la derniere commande sur heroku
+```
+flask db init 
+flask db migrate 
+
+heroku run flask db upgrade --app todolist-docker
+
+# exporter la database si cela ne marche toujours pas
+export DATABASE_URL="postgresql://postgres:password@db:5432/todolist"
+```
